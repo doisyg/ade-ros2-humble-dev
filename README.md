@@ -14,7 +14,19 @@ A minimal example of an ade-compatible project:
 
 ## Build and start
 
+- Create `ade-home` (if not created)
 ```
+$ cd ~
+$ mkdir ade-home
+$ cd ade-home
+$ touch .adehome
+```
+- **Note:** The `ade-home` directory can have any name, it just needs to contain `.adehome`
+
+- Clone this repository, build the docker image, and start ade
+```
+$ cd ~/ade-home/
+$ git clone git@gitlab.com:apexai/minimal-ade.git
 $ cd ~/ade-home/minimal-ade
 $ docker build -t image .
 $ ade start
