@@ -52,8 +52,10 @@ RUN apt-get install -y \
         ros-humble-rmw-cyclonedds-cpp \
         htop \
         iproute2
-        
-        
+
+# rosdep update
+RUN rosdep update --rosdistro=humble
+
 # After apt install sudo
 RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
