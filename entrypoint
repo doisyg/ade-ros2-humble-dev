@@ -51,7 +51,7 @@ if [[ -z "$SKIP_ADEINIT" ]]; then
     done
 fi
 
-
+sudo ip link set lo multicast on
 echo 'ADE startup completed.'
 exec "$@"
 
