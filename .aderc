@@ -1,12 +1,15 @@
 export ADE_DOCKER_RUN_ARGS="
   --cap-add=SYS_PTRACE
   --cap-add=SYS_ADMIN
-  --cap-add=NET_ADMIN
+  --cap-add=NET_ADMIN # needed for enabling multicast on lo
   --ulimit rtprio=100:100
   --ulimit memlock=-1:-1
   --shm-size 4G
 "
 
 export ADE_IMAGES="
-  image:latest
+  # use image built from this repo Dockerfile and stored on github (alternatively, you can build it locally
+  ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 
+  # Optional tools volume
+  ghcr.io/doisyg/ade-qtcreator-ros:8.0.1
 "

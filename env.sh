@@ -9,7 +9,7 @@ for x in /opt/*; do
     fi
 done
 
-# ROS2 bin and workspace sourcing
+# ROS2 bin sourcing
 source /opt/ros/humble/setup.bash
 
 # DDS configuration (more on that below)

@@ -1,43 +1,63 @@
-# minimal-ade
+# Ros2 Humble dev image
 
-A minimal example of an ade-compatible project:
+This is a ros2 humble developement ade image. 
+
+## Base image
+It is based on an augmented `osrf/ros:humble-desktop-full` docker image (see https://github.com/osrf/docker_images/tree/master/ros/humble/ubuntu/jammy) with:
+
+* Upgrading the ros package to the last sync (the osrf docker image update is not nescessarly released at the same time as the sync)
+* Installing classical build, test and development packages (and plotjuggler!)
+* Updating rosdep so it is immediatly usable
+* Installing Gazebo Ignition (Fortress)
+* Installing Cyclone DDS along with iproute2 (for enabling multicast on lo)
+
+## env.sh config
+The env.sh includes the sourcing of the ros2 binary, the variables to restrict DDS communication to local only and the selection of Cyclone as the DDS. Plus some variable for console formating:
 
 ```
-~/ade-home/
-├── .adehome <- Tells ade-cli that this is the root of this ade home
-└── minimal-ade
-    ├── .aderc <- Tells ade-cli what images and volumes to use
-    ├── Dockerfile
-    ├── entrypoint
-    └── env.sh
+# ROS2 bin sourcing
+source /opt/ros/humble/setup.bash
+
+# DDS configuration (more on that below)
+export ROS_LOCALHOST_ONLY=1 # Isolate DDS com (avoid same LAN crosstalk)
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp # Force usage of Cyclone instead of Fast DDS
+
+## Bonus stuff
+# Ros log console formatting
+export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity}] [{time}] [{name}]: {message}'
+export RCUTILS_COLORIZED_OUTPUT=1
+
+```
+## entrypoint config
+`sudo ip link set lo multicast on` was added to the entrypoint to for enabling multicast on lo)
+
+## .aderc file
+```
+export ADE_DOCKER_RUN_ARGS="
+  --cap-add=SYS_PTRACE
+  --cap-add=SYS_ADMIN
+  --cap-add=NET_ADMIN # needed for enabling multicast on lo
+  --ulimit rtprio=100:100
+  --ulimit memlock=-1:-1
+  --shm-size 4G
+"
+
+export ADE_IMAGES="
+  # use image built from this repo Dockerfile and stored on github (alternatively, you can build it locally
+  ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 
+  # Optional tools volume
+  ghcr.io/doisyg/ade-qtcreator-ros:8.0.1
+"
 ```
 
-## Build and start
+## Docker image building
+The base image is build with this repo Dockerfile. It was built locally with
+> docker build -t ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 .
 
-- Create `ade-home` (if not created)
-```
-$ cd ~
-$ mkdir ade-home
-$ cd ade-home
-$ touch .adehome
-```
-- **Note:** The `ade-home` directory can have any name, it just needs to contain `.adehome`
+And was then uploaded to the github registry with
+> echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+> docker push ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022
 
-- Clone this repository, build the docker image, and start ade
-```
-$ cd ~/ade-home/
-$ git clone git@gitlab.com:apexai/minimal-ade.git
-$ cd ~/ade-home/minimal-ade
-$ docker build -t image .
-$ ade start
-```
+Where `CR_PAT` is your github token
 
-## Additional recommendations
-
-1. Add `--label ade_image_commit_sha=<git hash>` and/or `--label ade_image_commit_tag=<git-tag>` to `docker build` to embed VCS information in the docker image
-2. Additional `docker run` arguments are usually needed to enable some tools (e.g. debuggers and networking tools). e.g. Add the following to `.aderc` to enable `gdb`:
-    ```
-    export ADE_DOCKER_RUN_ARGS="
-      --cap-add=SYS_PTRACE
-    "
-    ```
+No github action is set yet to do it directely on github.

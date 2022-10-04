@@ -51,6 +51,7 @@ if [[ -z "$SKIP_ADEINIT" ]]; then
     done
 fi
 
+# Enable multicast on loopback interface for ros localhost only 
 sudo ip link set lo multicast on
 echo 'ADE startup completed.'
 exec "$@"
