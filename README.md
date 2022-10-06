@@ -7,7 +7,7 @@ It is based on an augmented `osrf/ros:humble-desktop-full` docker image (see htt
 
 * Upgrading the ros package to the last sync (the osrf docker image update is not nescessarly released at the same time as the sync)
 * Installing classical build, test and development packages (and plotjuggler!)
-* Updating rosdep so it is immediatly usable
+* Updating rosdep so it is immediatly usable (however, as it is initialized as root by at the Docker image creation, sudo would have to be used, for instance: `rosdep install --from-paths . --ignore-src -y -r --rosdistro humble`)
 * Installing Gazebo Ignition (Fortress)
 * Installing Cyclone DDS along with iproute2 (for enabling multicast on lo)
 
