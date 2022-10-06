@@ -36,27 +36,38 @@ export RCUTILS_COLORIZED_OUTPUT=1
 export ADE_DOCKER_RUN_ARGS="
   --cap-add=SYS_PTRACE
   --cap-add=SYS_ADMIN
-  --cap-add=NET_ADMIN # needed for enabling multicast on lo
+  --cap-add=NET_ADMIN
   --ulimit rtprio=100:100
   --ulimit memlock=-1:-1
   --shm-size 4G
 "
 
 export ADE_IMAGES="
-  # use image built from this repo Dockerfile and stored on github (alternatively, you can build it locally
   ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 
-  # Optional tools volume
   ghcr.io/doisyg/ade-qtcreator-ros:8.0.1
 "
 ```
 
-## Docker image building
+`--cap-add=NET_ADMIN`
+
+needed for enabling multicast on lo
+
+`ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022`
+
+use image built from this repo Dockerfile and stored on github (alternatively, you can build it locally, see below)
+
+`ghcr.io/doisyg/ade-qtcreator-ros:8.0.1`
+
+Optional tools volume
+
+
+## Image building
 The base image is build with this repo Dockerfile. It was built locally with
-> docker build -t ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 .
+> $ docker build -t ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 .
 
 And was then uploaded to the github registry with
-> echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
-> docker push ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022
+> $ echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+> $ docker push ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022
 
 Where `CR_PAT` is your github token
 
