@@ -7,9 +7,9 @@ export ADE_DOCKER_RUN_ARGS="
   --shm-size 4G
 "
 
-export ADE_NAME="ros2-humble-dev"
+export ADE_NAME="ros2-rolling-dev"
 
 export ADE_IMAGES="
-  ghcr.io/doisyg/ade-ros2-humble-dev:04-10-2022 
+  ghcr.io/doisyg/ade-ros2-rolling-dev:15-11-2022
   ghcr.io/doisyg/ade-qtcreator-ros:8.0.1
 "
