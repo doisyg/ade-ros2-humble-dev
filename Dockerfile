@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop-full
+FROM osrf/ros:rolling-desktop-full
 
 RUN apt-get update
 
@@ -48,8 +48,8 @@ RUN apt-get upgrade -y
 
 # G additions	
 RUN apt-get install -y \
-        ros-humble-plotjuggler-ros \
-        ros-humble-rmw-cyclonedds-cpp \
+        ros-rolling-plotjuggler-ros \
+        ros-rolling-rmw-cyclonedds-cpp \
         htop \
         iproute2
 
